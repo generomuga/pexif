@@ -46,19 +46,24 @@ def get_filename(dir):
     return list_fnames
 
 def set_coordinates(dir, list_pid_coordinates, list_fnames):
+    count_tag = 0
     for id, lon, lat in list_pid_coordinates:
         for fname in list_fnames:
             try:
                 fid, year, mot, day, ph = fname.strip().split('_')
                 if str(id) == str(fid):
-                    print (id, lon, lat)
+                    #print (id, lon, lat)
                     set_gps(dir+fname, lat, lon)
+                    count_tag = count_tag + 1
             except:
+                #list_not_tag.append(fname)
                 pass
+
+    #print (count_tag)
 
 def set_gps(filename, lat, lon):
     try:
-        print (filename)
+        #print (filename)
         ef = JpegFile.fromFile(filename)
         ef.set_geo(float(lat), float(lon))
     except IOError:
@@ -69,8 +74,9 @@ def set_gps(filename, lat, lon):
         print >> sys.stderr, "Error opening file:", value
 
     try:
-        ef.writeFile(filename)
-        print ('Done')
+        fname = os.path.basename(filename)
+        ef.writeFile('E:\\Projects\\Python\\pexif\\output\\'+fname)
+        print (fname, 'Done')
     except IOError:
         type, value, traceback = sys.exc_info()
         print >> sys.stderr, "Error saving file:", value
@@ -85,14 +91,22 @@ def get_coordinates(list_gpx, list_photo_id_gid):
 
     return list_pid_coordinates
 
+def get_match_pid(list_pid_coordinates):
+    count_id = 0
+    for id, lon, lat in list_pid_coordinates:
+        #print (id)
+        count_id = count_id + 1
+    return count_id
+
 if __name__ == '__main__':
     list_gpx = read_gpx('E:\\Projects\\Python\\pexif\\input\\gpx_ref.csv')
     list_id = read_id('E:\\Projects\\Python\\pexif\\input\\id_ref.csv')
     list_photo_id_gid = get_photo_id_gid(list_gpx, list_id)
 
-    dir_pic = 'E:\\Projects\\Python\\pexif\\input\\RNR\\'
+    dir_pic = 'E:\\Projects\\Python\\pexif\\input\\RNR_v2\\'
     list_fnames = get_filename(dir_pic)
     list_pid_coordinates = get_coordinates(list_gpx, list_photo_id_gid)
+    print (get_match_pid(list_pid_coordinates))
     set_coordinates(dir_pic, list_pid_coordinates, list_fnames)
 
     #set_gps('E:\\Projects\\Python\\pexif\\input\\RNR\\10526_2019_3_10_1.jpg', 13.273, 121.786)
