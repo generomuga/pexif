@@ -1,9 +1,12 @@
 from lib import Utils
 import os
 import sys
+import numpy as np
 from pexif import JpegFile
 
+
 def read_gpx(filename):
+    print ('Getting gpx ref', filename)
     #Read gpx files
     file_input = open(filename, 'r')
 
@@ -16,6 +19,7 @@ def read_gpx(filename):
     return list_gpx
 
 def read_id(filename):
+    print ('Getting id ref', filename)
     #Read pic id
     file_input = open(filename, 'r')
 
@@ -56,10 +60,7 @@ def set_coordinates(dir, list_pid_coordinates, list_fnames):
                     set_gps(dir+fname, lat, lon)
                     count_tag = count_tag + 1
             except:
-                #list_not_tag.append(fname)
                 pass
-
-    #print (count_tag)
 
 def set_gps(filename, lat, lon):
     try:
@@ -75,7 +76,11 @@ def set_gps(filename, lat, lon):
 
     try:
         fname = os.path.basename(filename)
-        ef.writeFile('E:\\Projects\\Python\\pexif\\output\\'+fname)
+        #ef.writeFile('E:\\Projects\\Python\\pexif\\output\\SRIKAKULAM\\'+fname)
+
+        dir_output = sys.argv[4]
+        ef.writeFile(dir_output+fname)
+        
         print (fname, 'Done')
     except IOError:
         type, value, traceback = sys.exc_info()
@@ -98,15 +103,34 @@ def get_match_pid(list_pid_coordinates):
         count_id = count_id + 1
     return count_id
 
+def get_unique_photo_iwd(dir):
+    #Return filenames in directory
+    list_unique_id = []
+    for items in os.listdir(dir):
+        if items.endswith('.jpg'):
+            if items[:1] != '_':
+                fid, year, mot, day, ph = items.strip().split('_')
+                list_unique_id.append(fid)
+
+    return np.unique(np.array(list_unique_id))
+
 if __name__ == '__main__':
-    list_gpx = read_gpx('E:\\Projects\\Python\\pexif\\input\\gpx_ref.csv')
-    list_id = read_id('E:\\Projects\\Python\\pexif\\input\\id_ref.csv')
+    #list_gpx = read_gpx('E:\\Projects\\Python\\pexif\\input\\Srikakulam_gpx_ref.csv')
+    fname_gpx = sys.argv[1]
+    list_gpx = read_gpx(fname_gpx)
+   
+    #list_id = read_id('E:\\Projects\\Python\\pexif\\input\\Srikakulam_id_ref.csv')     
+    fname_id = sys.argv[2]
+    list_id = read_id(fname_id)
+
     list_photo_id_gid = get_photo_id_gid(list_gpx, list_id)
 
-    dir_pic = 'E:\\Projects\\Python\\pexif\\input\\RNR_v2\\'
+    #Set geotag
+    #dir_pic = 'H:\\Projects\\AndhraPradesh\\AP_ODK\\Open Data Kit\\Submissions\\\RNR_v2\\'
+    dir_pic = sys.argv[3]
+
     list_fnames = get_filename(dir_pic)
     list_pid_coordinates = get_coordinates(list_gpx, list_photo_id_gid)
-    print (get_match_pid(list_pid_coordinates))
     set_coordinates(dir_pic, list_pid_coordinates, list_fnames)
 
-    #set_gps('E:\\Projects\\Python\\pexif\\input\\RNR\\10526_2019_3_10_1.jpg', 13.273, 121.786)
+    #print get_unique_photo_id('E:\\Projects\\Python\\pexif\\input\\RNR_v2\\')
