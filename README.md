@@ -14,3 +14,11 @@ This tool requires the following packages installed for execution and future dev
 * ExifRead==2.1.2
 * numpy==1.16.2
 * pexif==0.15
+
+To install these packages easily, you can follow these steps:
+1) Open command prompt/terminal.
+2) Change directory (cd) to the directory where your `requirements.txt` is located.
+3) Type `python -m pip install -r requirements.txt`.
+
+## About the Developer
+This tool was developed by [Gene Romuga](https://github.com/generomuga), a programmer from Integrative Research Support (IRS) platform of IRRI.
