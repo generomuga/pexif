@@ -9,3 +9,8 @@ Geotagged photos serve as reference for ground data information validation of st
 * Setup a virtual environment using `virtualenv` package (https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/26/python-virtual-env/)
 * Activate virtual environment and install required dependencies.
 
+## Dependencies
+This tool requires the following packages installed for execution and future development: 
+* ExifRead==2.1.2
+* numpy==1.16.2
+* pexif==0.15
