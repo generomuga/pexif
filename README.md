@@ -20,5 +20,8 @@ To install these packages easily, you can follow these steps:
 2) Change directory (cd) to the directory where your `requirements.txt` is located.
 3) Type `python -m pip install -r requirements.txt`.
 
+## Geotag photo/s
+
+
 ## About the Developer
 This tool was developed by [Gene Romuga](https://github.com/generomuga), a programmer from Integrative Research Support (IRS) platform of IRRI.
